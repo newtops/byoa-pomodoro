@@ -1,0 +1,132 @@
+:root {
+    --primary-color: #5C6BC0;     /* Modern indigo */
+    --work-color: #7986CB;        /* Lighter indigo for work */
+    --break-color: #81C784;       /* Pleasant green for break */
+    --text-primary: #2C3E50;      /* Dark blue-grey */
+    --text-secondary: #34495E;    /* Lighter blue-grey */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    max-width: 400px;
+    width: 90%;
+    margin: 2rem auto;
+}
+
+h1 {
+    color: var(--text-primary);
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.timer-display {
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 2rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-variant-numeric: tabular-nums;
+}
+
+.status {
+    font-size: 1.5rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+button {
+    font-size: 1rem;
+    padding: 0.8rem 1.8rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#start {
+    background-color: var(--primary-color);
+    min-width: 120px;
+}
+
+#reset {
+    background-color: #E57373;
+    min-width: 120px;
+}
+
+#toggle-mode {
+    background-color: var(--break-color);
+    min-width: 120px;
+}
+
+/* Mode-specific styles */
+.work-mode {
+    background: linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%);
+}
+
+.break-mode {
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .container {
+        padding: 2rem;
+        margin: 1rem auto;
+    }
+
+    .timer-display {
+        font-size: 4rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+} 
