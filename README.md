@@ -19,4 +19,4 @@ A minimalist and elegant Pomodoro Timer web application to help you stay focused
 4. Use "Break Mode" button to manually switch between work and break periods
 5. Click "Reset" to start over at any time
 
-Built with HTML, CSS, and vanilla JavaScript for a lightweight, dependency-free experience.
+Built with HTML, CSS, and vanilla JavaScript for a lightweight, dependency-free experience. :)
