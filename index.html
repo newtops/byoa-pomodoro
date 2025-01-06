@@ -9,14 +9,26 @@
 <body>
     <div class="container">
         <h1>Pomodoro Timer</h1>
+        <div class="pomodoro-counter">
+            Pomodoros: <span id="pomodoro-count">0</span>/4
+        </div>
+        <div class="duration-selector">
+            <button class="duration-btn" data-duration="25">Classic (25/5)</button>
+            <button class="duration-btn" data-duration="50">Long (50/10)</button>
+        </div>
         <div class="timer-display">
             <span id="minutes">25</span>:<span id="seconds">00</span>
         </div>
         <div class="status" id="status">Work Time!</div>
         <div class="controls">
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
-            <button id="toggle-mode">Break Mode</button>
+            <div class="control-row">
+                <button id="start">Start</button>
+                <button id="toggle-mode">Break Mode</button>
+            </div>
+            <div class="control-row">
+                <button id="reset">Reset Timer</button>
+                <button id="reset-pomodoros">Reset Count</button>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

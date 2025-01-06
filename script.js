@@ -1,7 +1,20 @@
-// Timer variables
-let timeLeft = 25 * 60; // 25 minutes in seconds
+// Timer variables and configurations
+const TIMER_MODES = {
+    classic: {
+        work: 25 * 60,
+        break: 5 * 60
+    },
+    long: {
+        work: 50 * 60,
+        break: 10 * 60
+    }
+};
+
+let currentMode = 'classic';
+let timeLeft = TIMER_MODES[currentMode].work;
 let timerId = null;
 let isWorkTime = true;
+let pomodoroCount = 0;
 
 // Get DOM elements
 const minutesDisplay = document.getElementById('minutes');
@@ -19,6 +32,30 @@ function updateDisplay() {
     
     minutesDisplay.textContent = minutes.toString().padStart(2, '0');
     secondsDisplay.textContent = seconds.toString().padStart(2, '0');
+}
+
+// Change duration mode
+function changeDuration(mode) {
+    currentMode = mode;
+    
+    // Update active button styling
+    document.querySelectorAll('.duration-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.duration === (mode === 'classic' ? '25' : '50')) {
+            btn.classList.add('active');
+        }
+    });
+    
+    // Reset timer with new duration, maintaining work/break state
+    clearInterval(timerId);
+    timerId = null;
+    // Instead of forcing work mode, use current break/work state
+    timeLeft = isWorkTime ? 
+        TIMER_MODES[mode].work : 
+        TIMER_MODES[mode].break;
+    startButton.textContent = 'Start';
+    updateModeVisuals();
+    updateDisplay();
 }
 
 // Timer function
@@ -39,9 +76,16 @@ function startTimer() {
                 clearInterval(timerId);
                 timerId = null;
                 
+                // Only count completion if finishing a work session
+                if (isWorkTime) {
+                    handlePomodoroCompletion();
+                }
+                
                 // Toggle between work and break
                 isWorkTime = !isWorkTime;
-                timeLeft = isWorkTime ? 25 * 60 : 5 * 60;
+                timeLeft = isWorkTime ? 
+                    TIMER_MODES[currentMode].work : 
+                    TIMER_MODES[currentMode].break;
                 statusText.textContent = isWorkTime ? 'Work Time!' : 'Break Time!';
                 toggleButton.textContent = isWorkTime ? 'Break Mode' : 'Work Mode';
                 updateModeVisuals();
@@ -56,31 +100,45 @@ function startTimer() {
     }
 }
 
-// Reset function
+// Reset timer function
 function resetTimer() {
     clearInterval(timerId);
     timerId = null;
-    isWorkTime = true;
-    timeLeft = 25 * 60;
-    statusText.textContent = 'Work Time!';
+    timeLeft = isWorkTime ? 
+        TIMER_MODES[currentMode].work : 
+        TIMER_MODES[currentMode].break;
+    statusText.textContent = isWorkTime ? 'Work Time!' : 'Break Time!';
     startButton.textContent = 'Start';
+    toggleButton.textContent = isWorkTime ? 'Break Mode' : 'Work Mode';
+    updateModeVisuals();
     updateDisplay();
 }
 
-// Add this function to handle mode switching
-function updateModeVisuals() {
-    if (isWorkTime) {
-        document.body.classList.remove('break-mode');
-        document.body.classList.add('work-mode');
-    } else {
-        document.body.classList.remove('work-mode');
-        document.body.classList.add('break-mode');
+// Add new function for resetting pomodoros
+function resetPomodoros() {
+    pomodoroCount = 0;
+    document.getElementById('pomodoro-count').textContent = '0';
+}
+
+// Modify handlePomodoroCompletion to remove auto-reset
+function handlePomodoroCompletion() {
+    const increment = currentMode === 'classic' ? 1 : 2;
+    pomodoroCount += increment;
+    
+    const countDisplay = document.getElementById('pomodoro-count');
+    countDisplay.textContent = Math.min(pomodoroCount, 4);
+    
+    if (pomodoroCount >= 4) {
+        createParticles();
     }
 }
 
+// Toggle between work and break modes
 function toggleMode() {
     isWorkTime = !isWorkTime;
-    timeLeft = isWorkTime ? 25 * 60 : 5 * 60;
+    timeLeft = isWorkTime ? 
+        TIMER_MODES[currentMode].work : 
+        TIMER_MODES[currentMode].break;
     statusText.textContent = isWorkTime ? 'Work Time!' : 'Break Time!';
     toggleButton.textContent = isWorkTime ? 'Break Mode' : 'Work Mode';
     
@@ -96,10 +154,31 @@ function toggleMode() {
     updateDisplay();
 }
 
-// Event listeners
-startButton.addEventListener('click', startTimer);
-resetButton.addEventListener('click', resetTimer);
-toggleButton.addEventListener('click', toggleMode);
+// Set up event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Duration button listeners
+    const durationButtons = document.querySelectorAll('.duration-btn');
+    durationButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const duration = btn.dataset.duration;
+            changeDuration(duration === '25' ? 'classic' : 'long');
+        });
+    });
+    
+    // Set initial active state
+    document.querySelector('[data-duration="25"]').classList.add('active');
+    
+    // Other button listeners
+    startButton.addEventListener('click', startTimer);
+    resetButton.addEventListener('click', resetTimer);
+    toggleButton.addEventListener('click', toggleMode);
+    
+    // Add new reset pomodoros button listener
+    const resetPomodorosButton = document.getElementById('reset-pomodoros');
+    resetPomodorosButton.addEventListener('click', resetPomodoros);
+});
 
-// Initial display update
-updateDisplay(); 
+// Update visual mode (assuming this function exists in your CSS)
+function updateModeVisuals() {
+    container.classList.toggle('break-mode', !isWorkTime);
+} 

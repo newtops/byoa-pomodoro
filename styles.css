@@ -54,9 +54,14 @@ h1 {
 
 .controls {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
+}
+
+.control-row {
+    display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 button {
@@ -122,11 +127,62 @@ button:active {
         font-size: 2rem;
     }
 
-    .controls {
-        flex-direction: column;
-    }
-
-    button {
+    .control-row {
         width: 100%;
     }
+    
+    .control-row button {
+        flex: 1;
+    }
+}
+.duration-selector {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.duration-btn {
+    background-color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+}
+
+.duration-btn.active {
+    background-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.pomodoro-counter {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+/* Particle styles */
+.particle {
+    position: fixed;
+    pointer-events: none;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: particle-animation 1s ease-out forwards;
+}
+
+@keyframes particle-animation {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--tx), var(--ty));
+        opacity: 0;
+    }
+}
+
+#reset, #reset-pomodoros {
+    background-color: #e74c3c;  /* Red color matching the reset button */
+}
+
+#reset:hover, #reset-pomodoros:hover {
+    background-color: #c0392b;  /* Darker red on hover */
 } 
